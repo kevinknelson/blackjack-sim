@@ -36,12 +36,12 @@
                     $amountToBet    = $moneyLeft > $previousAmount ? $previousAmount : $moneyLeft;
                 }
                 if( $previousResult->Value == HandResult::Loss && $this->_lastResultUsed->Value == HandResult::Loss ) {
-                    $double         = $previousAmount * 2;
-                    $amountToBet    = $moneyLeft > $double ? $double : $moneyLeft;
+                    $desiredBet     = $previousAmount + $this->_minBet;
+                    $amountToBet    = $moneyLeft > $desiredBet ? $desiredBet : $moneyLeft;
                 }
                 if( $previousResult->Value == HandResult::Win ) {
-                    $double         = $previousAmount * 1.5;
-                    $amountToBet    = $moneyLeft > $double ? $double : $moneyLeft;
+                    $desiredBet     = $previousAmount;
+                    $amountToBet    = $moneyLeft > $desiredBet ? $desiredBet : $moneyLeft;
                 }
                 $this->_lastResultUsed  = $previousResult;
                 return min($amountToBet, $this->_maxBet);

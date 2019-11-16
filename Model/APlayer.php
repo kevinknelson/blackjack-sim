@@ -1,8 +1,7 @@
 <?php
 
     namespace Model {
-
-        use Model\Enum\HandResult;
+        use Model\HitStrategy\AHitStrategy;
         use Model\Strategy\AStrategy;
         use System\APropertiedObject;
 
@@ -16,6 +15,8 @@
         abstract class APlayer extends APropertiedObject {
             /** @var AStrategy */
             protected $_strategy;
+            /** @var AHitStrategy */
+            protected $_hitStrategy;
             /** @var bool */
             protected $_isHandComplete;
             /** @var Hand */
@@ -36,7 +37,10 @@
             public abstract function resetHand();
 
             public function wantsHit(Card $dealerFaceCard) {
-                return $this->_strategy->wantsHit($dealerFaceCard, $this->_hand);
+                return $this->_hitStrategy->wantsHit($dealerFaceCard, $this->_hand);
+            }
+            public function seesHand( Hand $hand ) {
+                $this->_hitStrategy->cardsSeen($hand);
             }
         }
     }

@@ -25,12 +25,5 @@
              * @return float
              */
             public abstract function getBetAmount( HandResult $previousResult, $previousBetAmount, $moneyLeft );
-
-            /**
-             * @param Card $dealerFaceCard
-             * @param Hand $hand
-             * @return bool
-             */
-            public abstract function wantsHit( Card $dealerFaceCard, Hand $hand );
         }
     }

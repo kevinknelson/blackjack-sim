@@ -29,11 +29,16 @@
                 if( $previousResult->Value == HandResult::Push ) {
                     $amountToBet    = $moneyLeft > $previousAmount ? $previousAmount : $moneyLeft;
                 }
-                if( $previousResult->Value == HandResult::Win ) {
-                    $double         = $previousAmount * 2;
-                    $amountToBet    = $moneyLeft > $double ? $double : $moneyLeft;
+                if( $previousResult->Value == HandResult::Loss ) {
+                    $desiredBet     = $this->_minBet;
+                    $amountToBet    = $moneyLeft > $desiredBet ? $desiredBet : $moneyLeft;
                 }
-                return min($amountToBet, $this->_maxBet);
+                if( $previousResult->Value == HandResult::Win ) {
+                    $desiredBet     = $previousAmount * 2;
+                    $amountToBet    = $moneyLeft > $desiredBet ? $desiredBet : $moneyLeft;
+                }
+                $lossPrevention     = $moneyLeft - $this->_quitMinimum;
+                return min($amountToBet, $this->_maxBet, $lossPrevention);
             }
 
             public function wantsHit( Card $dealerFaceCard, Hand $hand ) {

@@ -1,8 +1,7 @@
 <?php
 
     namespace Model {
-
-        use Model\Strategy\DealerStrategy;
+        use Model\HitStrategy\DefaultHitStrategy;
 
         class Dealer extends APlayer {
             /** @var CardDealerShoe  */
@@ -13,7 +12,7 @@
             public function __construct( CardDealerShoe $shoe ) {
                 $this->_shoe        = $shoe;
                 $this->_playerName  = "Dealer";
-                $this->_strategy    = new DealerStrategy(0,999999999);
+                $this->_hitStrategy = new DefaultHitStrategy();
                 $this->resetHand();
             }
             public function addPlayer( Player $player ) {
@@ -89,6 +88,15 @@
                                 $player->takeLoss("<span class='label label-danger'>DEALER WINS {$this->Hand->CurrentScore} over {$player->Hand->CurrentScore}</span>");
                             }
                         }
+                    }
+                }
+
+                // In case anyone wants to attempt a card-counting HitStrategy,
+                // let's make sure the players see all the hands.
+                foreach( $this->_players AS $player ) {
+                    $player->seesHand($this->Hand); // see dealers hand
+                    foreach( $this->_players AS $playerHand ) {
+                        $player->seesHand($playerHand->Hand); // see each players hand including own
                     }
                 }
                 $this->resetHand();

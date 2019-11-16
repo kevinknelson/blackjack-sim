@@ -1,6 +1,9 @@
 <?php
 
     namespace Model {
+
+        use Model\Event\ShoeRefillEvent;
+
         class CardDealerShoe extends CardDeck {
             private $_numberOfDecks;
 
@@ -18,8 +21,9 @@
             }
             public function deal() {
                 $result     = parent::deal();
-                if( count($this->_cards) == 0 ) {
+                if( count($this->_cards) < 104 ) {
                     $this->fillShoe();
+                    ShoeRefillEvent::instance()->trigger();
                 }
                 return $result;
             }

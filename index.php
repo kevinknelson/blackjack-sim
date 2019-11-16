@@ -1,6 +1,8 @@
 <?php namespace {
     use Model\CardDealerShoe;
     use Model\Dealer;
+    use Model\HitStrategy\DefaultCardCountingStrategy;
+    use Model\HitStrategy\DefaultHitStrategy;
     use Model\Player;
     use Model\Strategy\MartingaleMixedStrategy;
     use Model\Strategy\MartingaleStrategy;
@@ -28,17 +30,21 @@
         return false;
     });
 
-    $startingCash   = 5000;
+    $startingCash   = 25000;
+    $minimumBet     = 5;
+    $maximumBet     = 500;
     $dailyEarnGoal  = 10;
+    $dailyMaxLoss   = 500;
     $maxGamesPerDay = 1000;
-    $strategy       = new MartingaleStrategy(5, 500, 4500, $startingCash + $dailyEarnGoal);
+    $betStrategy    = new ReverseMartingaleStrategy($minimumBet, $maximumBet, $startingCash - $dailyMaxLoss, $startingCash + $dailyEarnGoal);
+    $hitStrategy    = new DefaultCardCountingStrategy();
 
     $finalBalance = 0;
 
-    for( $day=0; $day < 30; $day++ ) {
+    for( $day=0; $day < 365; $day++ ) { // play for a year and see what happens
         $shoe       = new CardDealerShoe(8);
         $dealer     = new Dealer($shoe);
-        $player     = new Player($strategy, "Player 1", $startingCash, false);
+        $player     = new Player($betStrategy, $hitStrategy, "Player 1", $startingCash, false);
         $dealer->addPlayer( $player );
 
         for( $i=0; $i < $maxGamesPerDay; $i++ ) {

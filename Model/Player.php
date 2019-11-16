@@ -3,6 +3,7 @@
     namespace Model {
 
         use Model\Enum\HandResult;
+        use Model\HitStrategy\AHitStrategy;
         use Model\Strategy\AStrategy;
 
         /**
@@ -43,8 +44,9 @@
                 return $this->_money;
             }
 
-            public function __construct( AStrategy $strategy, $playerName, $startingMoney, $showLog=true ) {
+            public function __construct( AStrategy $strategy, AHitStrategy $hitStrategy, $playerName, $startingMoney, $showLog=true ) {
                 $this->_strategy            = $strategy;
+                $this->_hitStrategy         = $hitStrategy;
                 $this->_playerName          = $playerName;
                 $this->_money               = $startingMoney;
                 $this->_previousHandResult  = HandResult::Win();

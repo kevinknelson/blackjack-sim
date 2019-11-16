@@ -29,18 +29,16 @@
                 if( $previousResult->Value == HandResult::Push ) {
                     $amountToBet    = $moneyLeft > $previousAmount ? $previousAmount : $moneyLeft;
                 }
+                if( $previousResult->Value == HandResult::Win ) {
+                    $desiredBet     = $this->_minBet;
+                    $amountToBet    = $moneyLeft > $desiredBet ? $desiredBet : $moneyLeft;
+                }
                 if( $previousResult->Value == HandResult::Loss ) {
-                    $double         = $previousAmount * 2;
-                    $amountToBet    = $moneyLeft > $double ? $double : $moneyLeft;
+                    $desiredBet     = $previousAmount * 2;
+                    $amountToBet    = $moneyLeft > $desiredBet ? $desiredBet : $moneyLeft;
                 }
-                return min($amountToBet, $this->_maxBet);
-            }
-
-            public function wantsHit( Card $dealerFaceCard, Hand $hand ) {
-                if( $hand->CurrentScore < 17 || $hand->IsSoftHand && $hand->CurrentScore < 18 ) {
-                    return true;
-                }
-                return false;
+                $lossPrevention     = $moneyLeft - $this->_quitMinimum;
+                return min($amountToBet, $this->_maxBet, $lossPrevention);
             }
         }
     }
