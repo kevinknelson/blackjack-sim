@@ -29,9 +29,9 @@
     });
 
     $startingCash   = 5000;
-    $dailyEarnGoal  = 100;
+    $dailyEarnGoal  = 10;
     $maxGamesPerDay = 1000;
-    $strategy       = new MartingaleStrategy(10, 500, 4500, $startingCash + $dailyEarnGoal);
+    $strategy       = new MartingaleStrategy(5, 500, 4500, $startingCash + $dailyEarnGoal);
 
     $finalBalance = 0;
 
