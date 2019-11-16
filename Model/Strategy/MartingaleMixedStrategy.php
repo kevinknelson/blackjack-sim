@@ -5,7 +5,13 @@
         use Model\Enum\HandResult;
         use Model\Hand;
 
-        class MartingaleStrategy extends AStrategy {
+        class MartingaleMixedStrategy extends AStrategy {
+            /** @var HandResult */
+            private $_lastResultUsed;
+            public function __construct($minBet,$maxBet) {
+                parent::__construct($minBet,$maxBet);
+                $this->_lastResultUsed = HandResult::Push();
+            }
             public function getBetAmount( HandResult $previousResult, $previousAmount, $moneyLeft ) {
                 if( isset($this->_quitMinimum) && $moneyLeft <= $this->_quitMinimum ) {
                     echo("\r\n<li><span class='label label-danger'>LOST TOO MUCH</span> Quitting because I've lost as much as I'm willing.</li>");
@@ -29,10 +35,15 @@
                 if( $previousResult->Value == HandResult::Push ) {
                     $amountToBet    = $moneyLeft > $previousAmount ? $previousAmount : $moneyLeft;
                 }
-                if( $previousResult->Value == HandResult::Loss ) {
+                if( $previousResult->Value == HandResult::Loss && $this->_lastResultUsed->Value == HandResult::Loss ) {
                     $double         = $previousAmount * 2;
                     $amountToBet    = $moneyLeft > $double ? $double : $moneyLeft;
                 }
+                if( $previousResult->Value == HandResult::Win ) {
+                    $double         = $previousAmount * 1.5;
+                    $amountToBet    = $moneyLeft > $double ? $double : $moneyLeft;
+                }
+                $this->_lastResultUsed  = $previousResult;
                 return min($amountToBet, $this->_maxBet);
             }
 

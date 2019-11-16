@@ -9,9 +9,14 @@
             protected $_minBet;
             protected $_maxBet;
 
-            public function __construct( $minBet, $maxBet ) {
-                $this->_minBet = $minBet;
-                $this->_maxBet = $maxBet;
+            protected $_quitMinimum;
+            protected $_quitMaximum;
+
+            public function __construct( $minBet, $maxBet, $quitMinimum=null, $quitMaximum=null ) {
+                $this->_minBet      = $minBet;
+                $this->_maxBet      = $maxBet;
+                $this->_quitMinimum = $quitMinimum;
+                $this->_quitMaximum = $quitMaximum;
             }
             /**
              * @param HandResult $previousResult

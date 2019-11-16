@@ -26,6 +26,10 @@
             }
 
             public function runHand() {
+                if( count($this->_players) == 0 ) {
+                    echo("\r\n<li>No players, game ended</li>");
+                    return false;
+                }
                 // deal 1st card
                 foreach( $this->_players AS $player ) {
                     $player->Hand->addCard($this->_shoe->deal());
@@ -88,9 +92,14 @@
                     }
                 }
                 $this->resetHand();
-                foreach( $this->_players AS $player ) {
+                foreach( $this->_players AS $key => $player ) {
                     $player->resetHand();
+                    if( !$player->IsPlaying ) {
+                        echo("\r\n<li>{$player->PlayerName} has quit</li>");
+                        unset($this->_players[$key]);
+                    }
                 }
+                return true;
             }
         }
     }

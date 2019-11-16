@@ -5,7 +5,7 @@
         use Model\Enum\HandResult;
         use Model\Hand;
 
-        class MartingaleStrategy extends AStrategy {
+        class ReverseMartingaleStrategy extends AStrategy {
             public function getBetAmount( HandResult $previousResult, $previousAmount, $moneyLeft ) {
                 if( isset($this->_quitMinimum) && $moneyLeft <= $this->_quitMinimum ) {
                     echo("\r\n<li><span class='label label-danger'>LOST TOO MUCH</span> Quitting because I've lost as much as I'm willing.</li>");
@@ -29,7 +29,7 @@
                 if( $previousResult->Value == HandResult::Push ) {
                     $amountToBet    = $moneyLeft > $previousAmount ? $previousAmount : $moneyLeft;
                 }
-                if( $previousResult->Value == HandResult::Loss ) {
+                if( $previousResult->Value == HandResult::Win ) {
                     $double         = $previousAmount * 2;
                     $amountToBet    = $moneyLeft > $double ? $double : $moneyLeft;
                 }
